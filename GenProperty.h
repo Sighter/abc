@@ -18,7 +18,7 @@
 /* define a template for basic types
  */
 template <typename typ>
-class GenProperty : GenPropertyBase
+class GenProperty : public GenPropertyBase
 {
     public:
 
