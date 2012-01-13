@@ -34,6 +34,8 @@ DEFINE_NEW_GETTYPENAME(int)
 DEFINE_NEW_GETTYPENAME(int*)
 DEFINE_NEW_GETTYPENAME(int&)
 DEFINE_NEW_GETTYPENAME(float)
+DEFINE_NEW_GETTYPENAME(float*)
+DEFINE_NEW_GETTYPENAME(float&)
 DEFINE_NEW_GETTYPENAME(double)
 DEFINE_NEW_GETTYPENAME(double&)
 DEFINE_NEW_GETTYPENAME(double*)
@@ -86,6 +88,15 @@ class GenProperty : public GenPropertyBase
 
         /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*/
 
+        /* copy constructor
+         */
+        GenProperty(GenProperty<typ>& rOrigin)
+        {
+            this->mKey = rOrigin.GetKey();
+            
+            this->SetValue(rOrigin.GetValue());
+        }
+
         /** destructor
          */
         ~GenProperty()
@@ -126,6 +137,13 @@ class GenProperty : public GenPropertyBase
             std::cout << this->GetValue();
         }
 
+        /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*/
+
+        std::string GetKey()
+        {
+            return this->mKey;
+        }
+
         /*============================= OPERATIONS =================================*/
 
         void ToOutStream(std::ostream& rOut)
@@ -135,6 +153,46 @@ class GenProperty : public GenPropertyBase
         }
         
         /*============================= INQUIRY    =================================*/
+        
+        /*============================= OPERATORS ==================================*/
+
+        /** equal operator 
+         */
+        bool operator==(GenProperty<typ>& rRight)
+        {
+            if (this->GetValue() != rRight.GetValue())
+                return false;
+
+            if (this->GetTypeN() != rRight.GetTypeN())
+                return false;
+
+            if (this->GetKey() != rRight.GetKey())
+                return false;
+
+            return true;
+        }
+
+        /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*/
+
+        /** assignment operator
+         */
+        GenProperty<typ>& operator=(GenProperty<typ>& rRight)
+        {
+            if (this != &rRight)
+            {
+                if (this->HasValue())
+                {
+                    delete (typ*) this->mpData;
+                    this->mpData = NULL;
+                }
+
+                this->SetValue(rRight.GetValue());
+
+                this->mKey = rRight.GetKey();
+            }
+
+            return *this;
+        }
 
 };
 

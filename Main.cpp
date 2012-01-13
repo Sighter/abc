@@ -55,7 +55,14 @@ int main()
    list<GenPropertyBase*>::const_iterator it;
    for (it = prop_list.begin(); it != prop_list.end(); it++)
    {
-       cout << *(*it) << "   Has Value: " << (*it)->HasValue();
+       try
+       {
+           cout << *(*it) << "   Has Value: " << (*it)->HasValue();
+       }
+       catch(ErrorGenProperty &exc)
+       {
+           cout << "Property Error: " << exc.what();
+       }
        cout << endl;
    }
 
@@ -65,4 +72,26 @@ int main()
    cout << "Float --> " << GetTypeName<float>() << endl;
    cout << "double* --> " << GetTypeName<double*>() << endl;
 
+   GenProperty<string> second_str_prop("Hallo", "str_prop");
+
+   
+   cout << "Compare Property " << str_prop << " with " << second_str_prop << " = ";
+
+   if (str_prop == second_str_prop)
+       cout << "equal";
+   else
+       cout << "non equal";
+
+   cout << endl << endl;
+
+   
+   GenProperty<string> assign("Hallo du", "assign");
+
+   second_str_prop = assign;
+
+   cout << second_str_prop << endl;
+
+   GenProperty<string> mcopy(second_str_prop);
+
+   cout << "Copy: " << second_str_prop << endl;
 }
