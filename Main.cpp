@@ -21,12 +21,12 @@ int main()
    GenProperty<int> prop; 
    prop.SetValue(42);
    prop.Print();
-   cout << endl << "Typeid: " << prop.GetTypeID() << endl;
+   cout << endl << "Typeid: " << prop.GetTypeN() << endl;
 
    GenProperty<string> str_prop;
    str_prop.SetValue("Hallo");
    str_prop.Print();
-   cout << endl << "Typeid: " << str_prop.GetTypeID() << endl;
+   cout << endl << "Typeid: " << str_prop.GetTypeN() << endl;
 
 
    list<GenPropertyBase*> prop_list;
@@ -41,8 +41,14 @@ int main()
    list<GenPropertyBase*>::const_iterator it;
    for (it = prop_list.begin(); it != prop_list.end(); it++)
    {
-       (*it)->Print();
+       cout << *(*it);
        cout << endl;
    }
+
+
+   cout << "types:\n";
+   cout << "Int --> " << GetTypeName<int>() << endl;
+   cout << "Float --> " << GetTypeName<float>() << endl;
+   cout << "double* --> " << GetTypeName<double*>() << endl;
 
 }

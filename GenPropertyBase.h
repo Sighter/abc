@@ -25,8 +25,9 @@ class GenPropertyBase
     public:
 
         GenPropertyBase()
+        :   mKey(""),
+            mpData(NULL)
         {
-            this->mpData = NULL;
         }
 
         virtual ~GenPropertyBase() {};
@@ -34,7 +35,7 @@ class GenPropertyBase
         void SetKey(std::string const& rKey) {this->mKey = rKey; };
 
         virtual void Print() = 0;
-        //virtual void ToOutStream(std::ostream& rOut) = 0;
+        virtual void ToOutStream(std::ostream& rOut) = 0;
 };
 
 #endif
