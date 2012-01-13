@@ -13,6 +13,7 @@
 #include <typeinfo>
 
 #include "GenPropertyBase.h"
+#include "DefineException.h"
 
 /** typename templates
  */
@@ -39,6 +40,11 @@ DEFINE_NEW_GETTYPENAME(double*)
 DEFINE_NEW_GETTYPENAME(std::string)
 DEFINE_NEW_GETTYPENAME(std::string&)
 DEFINE_NEW_GETTYPENAME(std::string*)
+
+
+/** exceptions
+ */
+DEFINE_VAR_EXCEPTION(ErrorGenProperty)
 
 
 /* define a template for basic types
@@ -102,7 +108,10 @@ class GenProperty : public GenPropertyBase
 
         typ GetValue()
         {
-            return *this->mpData;
+            if (this->HasValue())
+                return *((typ*)this->mpData);
+            else
+                throw ErrorGenProperty("NO_PROP_VALUE");
         };
 
         /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*/
@@ -114,7 +123,7 @@ class GenProperty : public GenPropertyBase
 
         void Print()
         {
-            std::cout << *((typ*) this->mpData);
+            std::cout << this->GetValue();
         }
 
         /*============================= OPERATIONS =================================*/
@@ -122,7 +131,7 @@ class GenProperty : public GenPropertyBase
         void ToOutStream(std::ostream& rOut)
         {
             rOut << "[PROP<" << this->GetTypeN() << ">"
-                 << this->mKey << ":" << *((typ*) this->mpData) << "]";
+                 << this->mKey << ":" << this->GetValue()<< "]";
         }
         
         /*============================= INQUIRY    =================================*/

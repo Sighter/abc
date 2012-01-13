@@ -30,6 +30,15 @@ class GenPropertyBase
         {
         }
 
+        bool HasValue() const
+        {
+            if (this->mpData)
+                return true;
+            else
+                return false;
+        }
+
+
         virtual ~GenPropertyBase() {};
 
         void SetKey(std::string const& rKey) {this->mKey = rKey; };
