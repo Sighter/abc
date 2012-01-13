@@ -25,7 +25,7 @@ class GenPropertyBase
     public:
 
         GenPropertyBase()
-        :   mKey(""),
+        :   mKey("NoKey"),
             mpData(NULL)
         {
         }

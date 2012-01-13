@@ -17,25 +17,34 @@ using namespace std;
 
 int main()
 {
+   
+   int* p_int = new int(87);
+   cout << "Pointer type:" << p_int << endl; 
 
-   GenProperty<int> prop; 
+   GenProperty<int*> pointer_prop(p_int, "pointer_prop");
+
+   GenProperty<int> prop("IntegerProp"); 
    prop.SetValue(42);
-   prop.Print();
-   cout << endl << "Typeid: " << prop.GetTypeN() << endl;
 
-   GenProperty<string> str_prop;
+   prop.SetValue(32);
+
+   GenProperty<string> str_prop("str_prop");
    str_prop.SetValue("Hallo");
-   str_prop.Print();
-   cout << endl << "Typeid: " << str_prop.GetTypeN() << endl;
 
+   
+   GenProperty<double> double_prop(32.45, "double_prop");
 
    list<GenPropertyBase*> prop_list;
 
    GenPropertyBase* p1 = &prop;
    GenPropertyBase* p2 = &str_prop;
+   GenPropertyBase* p3 = &double_prop;
+   GenPropertyBase* p4 = &pointer_prop;
 
    prop_list.push_back(p1);
    prop_list.push_back(p2);
+   prop_list.push_back(p3);
+   prop_list.push_back(p4);
 
 
    list<GenPropertyBase*>::const_iterator it;

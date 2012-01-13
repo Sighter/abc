@@ -30,6 +30,8 @@ std::string GetTypeName<type>() {return "" #type ""; }; \
 /** define important types
  */
 DEFINE_NEW_GETTYPENAME(int)
+DEFINE_NEW_GETTYPENAME(int*)
+DEFINE_NEW_GETTYPENAME(int&)
 DEFINE_NEW_GETTYPENAME(float)
 DEFINE_NEW_GETTYPENAME(double)
 DEFINE_NEW_GETTYPENAME(double&)
@@ -46,21 +48,64 @@ class GenProperty : public GenPropertyBase
 {
     public:
 
+        /////////////////////////////// PUBLIC ///////////////////////////////////////
+
+        /*============================= LIFECYCLE ==================================*/
+        
+        /* default constructor
+         */
+        GenProperty()
+        {
+        }
+
+        /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*/
+
+        /* empty constructor with key
+         */
+        GenProperty(std::string const& rKey)
+        {
+            this->mKey = rKey;
+        }
+
+        /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*/
+
+        /* constructor with value and key
+         */
+        GenProperty(typ value, std::string const& rKey)
+        {
+            this->mKey = rKey;
+
+            this->SetValue(value);
+        }
+
+        /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*/
+
+        /** destructor
+         */
         ~GenProperty()
         {
             if (this->mpData)
                 delete (typ*) this->mpData;
         };
         
+        /*============================= ACESS      =================================*/
+
         void SetValue(typ value)
         {
-            this->mpData = (void*) new typ(value); 
+            if (!(this->mpData))
+                this->mpData = (void*) new typ(value); 
+            else
+                *((typ*)(this->mpData)) = value;
         };
     
+        /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*/
+
         typ GetValue()
         {
             return *this->mpData;
         };
+
+        /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -*/
 
         std::string GetTypeN()
         {
@@ -72,12 +117,19 @@ class GenProperty : public GenPropertyBase
             std::cout << *((typ*) this->mpData);
         }
 
+        /*============================= OPERATIONS =================================*/
+
         void ToOutStream(std::ostream& rOut)
         {
             rOut << "[PROP<" << this->GetTypeN() << ">"
                  << this->mKey << ":" << *((typ*) this->mpData) << "]";
         }
+        
+        /*============================= INQUIRY    =================================*/
+
 };
+
+/*============================= OPERATORS ==================================*/
 
 std::ostream& operator<<(std::ostream& rOut, GenPropertyBase& rProp)
 {
